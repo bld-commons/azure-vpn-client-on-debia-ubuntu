@@ -37,14 +37,10 @@ both systems).
 
 ## Steps
 
-### 1. Getting the package (if you don't have it)
+### 1. Package
 
-On a machine that already has the client installed:
-
-```bash
-dpkg-repack microsoft-azurevpnclient
-scp microsoft-azurevpnclient_3.0.0_amd64.deb <user>@<this-machine>:~/
-```
+The installer is `microsoft-azurevpnclient_3.0.0_amd64.deb`, included in
+this folder.
 
 ### 2. Installation
 
@@ -121,6 +117,11 @@ sudo systemctl restart NetworkManager
 sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 ```
 
+**Reboot the machine at this point** (`sudo reboot`). Restarting
+NetworkManager with the new DNS configuration can drop the connection (we
+lost internet until reboot), and after a reboot the whole DNS stack comes up
+clean.
+
 ### 6. polkit rule for passwordless DNS
 
 Without it, Connect can hang on a polkit authentication prompt (the `.pkla`
@@ -145,6 +146,8 @@ polkit.addRule(function(action, subject) {
 ```
 
 ### 7. Start and verify
+
+After the reboot, launch the client:
 
 ```bash
 # launch the client (or from the GNOME launcher: "Azure VPN Client")

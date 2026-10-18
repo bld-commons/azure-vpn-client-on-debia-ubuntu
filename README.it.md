@@ -38,14 +38,10 @@ problemi (verificato con `dpkg --audit` su entrambi i sistemi).
 
 ## Passaggi
 
-### 1. Recupero del pacchetto (se non ce l'hai)
+### 1. Pacchetto
 
-Sulla macchina che ha già il client installato:
-
-```bash
-dpkg-repack microsoft-azurevpnclient
-scp microsoft-azurevpnclient_3.0.0_amd64.deb <user>@<questa-macchina>:~/
-```
+L'installer è `microsoft-azurevpnclient_3.0.0_amd64.deb`, incluso in questa
+cartella.
 
 ### 2. Installazione
 
@@ -124,6 +120,11 @@ sudo systemctl restart NetworkManager
 sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 ```
 
+**A questo punto riavvia la macchina** (`sudo reboot`). Il riavvio di
+NetworkManager con la nuova configurazione DNS può far perdere la connessione
+(nel nostro caso senza internet fino al reboot), e dopo un reboot l'intero
+stack DNS parte pulito.
+
 ### 6. Regola polkit per il DNS senza password
 
 Senza questa regola, Connect può bloccarsi su un prompt di autenticazione
@@ -148,6 +149,8 @@ polkit.addRule(function(action, subject) {
 ```
 
 ### 7. Avvio e verifica
+
+Dopo il reboot, avvia il client:
 
 ```bash
 # avvia il client (o dalla launcher GNOME: "Azure VPN Client")
